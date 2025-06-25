@@ -1,12 +1,16 @@
 import {Circle, makeScene2D} from '@motion-canvas/2d';
-import {createRef} from '@motion-canvas/core';
+import {createRef, all} from '@motion-canvas/core';
+import {ThreadGenerator} from '@motion-canvas/core';
 
 export default makeScene2D(function* (view) {
-  // Create your animations here
-
   const circle = createRef<Circle>();
-
-  view.add(<Circle ref={circle} size={320} fill={'lightseagreen'} />);
-
-  yield* circle().scale(2, 2).to(1, 2);
+  view.add(<Circle ref={circle} width={100} height={100} fill='blue' />);
+  yield* changeScaleColor(circle());
 });
+
+function* changeScaleColor(circle: Circle): ThreadGenerator {
+  yield* all(
+    circle.fill('red', 1),
+    circle.scale(2, 1)
+  );
+}
